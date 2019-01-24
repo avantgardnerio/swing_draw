@@ -16,11 +16,19 @@ class DrawingWindow : JFrame(), MouseListener, MouseMotionListener, KeyListener 
     }
 
     override fun paint(graphics: Graphics?) {
-        super.paint(graphics)
-
         val g = graphics as Graphics2D
-        g.color = Color.BLACK
-        g.fillRect(0, 0, 400, 400)
+        val top = height - contentPane.height
+        
+        g.color = Color.GRAY
+        g.fillRect(0, 0, width, height)
+
+        g.color = Color.DARK_GRAY
+        g.drawLine(20, top + 20, 220, top + 20)
+        g.drawLine(20, top + 20, 20, top + 40)
+
+        g.color = Color.WHITE
+        g.drawLine(220, top + 40, 20, top + 40)
+        g.drawLine(220, top + 20, 220, top + 40)
     }
 
     override fun mouseReleased(p0: MouseEvent?) {
