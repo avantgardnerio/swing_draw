@@ -52,7 +52,7 @@ class DrawingWindow(var root: Widget) : JFrame(), MouseListener, MouseMotionList
 
     override fun mouseMoved(p0: MouseEvent?) {
         //println("mouseMoved")
-        repaint()
+        //repaint()
     }
 
     override fun mouseDragged(p0: MouseEvent?) {

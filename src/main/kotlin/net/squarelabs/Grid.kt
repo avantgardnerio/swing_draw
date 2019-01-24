@@ -59,9 +59,9 @@ class Grid : Widget {
                 cell.paint(g, width, height)
 
                 g.translate(-offsetX, -offsetY)
-                left + width
+                left + width + 2
             }
-            top + height
+            top + height + 2
         }
     }
 
