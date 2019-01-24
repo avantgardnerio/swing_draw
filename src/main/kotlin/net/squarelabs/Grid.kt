@@ -19,6 +19,8 @@ class Grid : Widget {
     }
 
     override fun paint(g: Graphics2D, width: Int, height: Int) {
+        super.paint(g, width, height)
+
         val rowSizes = children.map { it.measure(g) }
         val heightPt = rowSizes.filter { it.height.units == Unit.POINTS }.fold(0) { acc, cur -> acc + cur.height.size }
         val heightPct = rowSizes.filter { it.height.units == Unit.PERCENT }.fold(0) { acc, cur -> acc + cur.height.size }
