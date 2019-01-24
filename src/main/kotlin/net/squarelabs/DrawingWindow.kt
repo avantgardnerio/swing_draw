@@ -4,31 +4,31 @@ import java.awt.*
 import java.awt.event.*
 import javax.swing.JFrame
 
-class DrawingWindow : JFrame(), MouseListener, MouseMotionListener, KeyListener {
+class DrawingWindow(var root: Widget) : JFrame(), MouseListener, MouseMotionListener, KeyListener, ComponentListener {
 
     init {
-        defaultCloseOperation = EXIT_ON_CLOSE
-        size = Dimension(400, 400)
-        isVisible = true
+        addComponentListener(this)
         addMouseListener(this)
         addMouseMotionListener(this)
         addKeyListener(this)
+        defaultCloseOperation = EXIT_ON_CLOSE
+        size = Dimension(400, 400)
+        isVisible = true
     }
 
     override fun paint(graphics: Graphics?) {
         val g = graphics as Graphics2D
         val top = height - contentPane.height
-        
-        g.color = Color.GRAY
-        g.fillRect(0, 0, width, height)
 
-        g.color = Color.DARK_GRAY
-        g.drawLine(20, top + 20, 220, top + 20)
-        g.drawLine(20, top + 20, 20, top + 40)
+        g.translate(0, top)
+        g.clipRect(0, 0, width, height - top)
 
-        g.color = Color.WHITE
-        g.drawLine(220, top + 40, 20, top + 40)
-        g.drawLine(220, top + 20, 220, top + 40)
+        root.paint(g)
+    }
+
+    override fun componentResized(me: ComponentEvent?) {
+        println("componentResized")
+        root.resize(contentPane.width, contentPane.height)
     }
 
     override fun mouseReleased(p0: MouseEvent?) {
@@ -70,5 +70,17 @@ class DrawingWindow : JFrame(), MouseListener, MouseMotionListener, KeyListener 
 
     override fun keyReleased(p0: KeyEvent?) {
         println("keyReleased")
+    }
+
+    override fun componentMoved(p0: ComponentEvent?) {
+        println("componentMoved")
+    }
+
+    override fun componentHidden(p0: ComponentEvent?) {
+        println("componentHidden")
+    }
+
+    override fun componentShown(p0: ComponentEvent?) {
+        println("componentShown")
     }
 }
