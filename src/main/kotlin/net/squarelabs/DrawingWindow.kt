@@ -1,8 +1,6 @@
 package net.squarelabs
 
-import java.awt.Color
-import java.awt.Dimension
-import java.awt.Graphics
+import java.awt.*
 import java.awt.event.*
 import javax.swing.JFrame
 
@@ -17,8 +15,12 @@ class DrawingWindow : JFrame(), MouseListener, MouseMotionListener, KeyListener 
         addKeyListener(this)
     }
 
-    override fun paint(p0: Graphics?) {
-        super.paint(p0)
+    override fun paint(graphics: Graphics?) {
+        super.paint(graphics)
+
+        val g = graphics as Graphics2D
+        g.color = Color.BLACK
+        g.fillRect(0, 0, 400, 400)
     }
 
     override fun mouseReleased(p0: MouseEvent?) {
@@ -43,6 +45,7 @@ class DrawingWindow : JFrame(), MouseListener, MouseMotionListener, KeyListener 
 
     override fun mouseMoved(p0: MouseEvent?) {
         //println("mouseMoved")
+        repaint()
     }
 
     override fun mouseDragged(p0: MouseEvent?) {
