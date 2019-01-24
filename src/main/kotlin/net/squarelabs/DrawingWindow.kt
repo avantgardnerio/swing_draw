@@ -20,10 +20,9 @@ class DrawingWindow(var root: Widget) : JFrame(), MouseListener, MouseMotionList
         val g = graphics as Graphics2D
         val top = height - contentPane.height
 
-        g.translate(0, top)
+        g.translate(-root.getOrigin().x, top - root.getOrigin().y)
         g.clipRect(0, 0, width, height - top)
-
-        root.paint(g)
+        root.paint(g, width, height)
     }
 
     override fun componentResized(me: ComponentEvent?) {
