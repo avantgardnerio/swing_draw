@@ -3,12 +3,10 @@ package net.squarelabs
 import java.awt.Color
 import java.awt.Dimension
 import java.awt.Graphics
-import java.awt.event.MouseEvent
-import java.awt.event.MouseListener
-import java.awt.event.MouseMotionListener
+import java.awt.event.*
 import javax.swing.JFrame
 
-class DrawingWindow : JFrame(), MouseListener, MouseMotionListener {
+class DrawingWindow : JFrame(), MouseListener, MouseMotionListener, KeyListener {
 
     init {
         defaultCloseOperation = EXIT_ON_CLOSE
@@ -16,6 +14,7 @@ class DrawingWindow : JFrame(), MouseListener, MouseMotionListener {
         isVisible = true
         addMouseListener(this)
         addMouseMotionListener(this)
+        addKeyListener(this)
     }
 
     override fun paint(p0: Graphics?) {
@@ -48,5 +47,17 @@ class DrawingWindow : JFrame(), MouseListener, MouseMotionListener {
 
     override fun mouseDragged(p0: MouseEvent?) {
         //println("mouseDragged")
+    }
+
+    override fun keyTyped(p0: KeyEvent?) {
+        println("keyTyped")
+    }
+
+    override fun keyPressed(p0: KeyEvent?) {
+        println("keyPressed")
+    }
+
+    override fun keyReleased(p0: KeyEvent?) {
+        println("keyReleased")
     }
 }
