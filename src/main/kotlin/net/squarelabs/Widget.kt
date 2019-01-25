@@ -1,8 +1,6 @@
 package net.squarelabs
 
-import java.awt.Color
 import java.awt.Graphics2D
-import java.awt.Point
 
 interface Widget {
     // children
@@ -20,7 +18,11 @@ interface Widget {
     fun getOuterRect(): Rect
 
     // layout
-    fun layout(rect: Rect)
+    fun layout(rect: Rect) {
+        getChildren().forEach { child ->
+            child.layout(rect)
+        }
+    }
 
     // painting
     fun paint(graphics: Graphics2D, width: Int, height: Int) {
@@ -28,7 +30,9 @@ interface Widget {
             graphics.translate(c.getOuterRect().origin.x, c.getOuterRect().origin.y)
             graphics.clipRect(0, 0, c.getOuterRect().size.x, c.getOuterRect().size.y)
             graphics.translate(c.getInnerRect().origin.x, c.getInnerRect().origin.y)
-            c.paint(graphics, Math.min(width, c.getOuterRect().size.x), Math.min(height, c.getOuterRect().size.y))
+            val w = Math.min(width, c.getOuterRect().size.x)
+            val h = Math.min(height, c.getOuterRect().size.y)
+            c.paint(graphics, w, h)
         }
     }
 }
