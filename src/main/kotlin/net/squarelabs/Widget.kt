@@ -9,18 +9,12 @@ interface Widget {
 
     fun addChild(child: Widget)
 
-    fun getOrigin(): Point
+    fun getInnerRect(): Rect
 
-    fun getBackgroundColor(): Color {
-        return Color.GRAY
-    }
+    fun getOuterRect(): Rect
 
-    fun measure(graphics: Graphics2D): Bounds
-
-    fun resize(width: Int, height: Int)
+    fun layout(size: Point)
 
     fun paint(graphics: Graphics2D, width: Int, height: Int) {
-        graphics.color = getBackgroundColor()
-        graphics.fillRect(0, 0, width, height)
     }
 }

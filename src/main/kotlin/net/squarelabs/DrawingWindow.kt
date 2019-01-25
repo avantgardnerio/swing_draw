@@ -20,14 +20,16 @@ class DrawingWindow(var root: Widget) : JFrame(), MouseListener, MouseMotionList
         val g = graphics as Graphics2D
         val top = height - contentPane.height
 
-        g.translate(-root.getOrigin().x, top - root.getOrigin().y)
-        g.clipRect(0, 0, width, height - top)
+        g.translate(0, top) // don't draw behind OS title bar
+        g.translate(root.getOuterRect().origin.x, root.getOuterRect().origin.y)
+        g.clipRect(0, 0, root.getOuterRect().size.x, root.getOuterRect().size.y)
+        g.translate(root.getInnerRect().origin.x, root.getInnerRect().origin.y)
         root.paint(g, width, height)
     }
 
     override fun componentResized(me: ComponentEvent?) {
         println("componentResized")
-        root.resize(contentPane.width, contentPane.height)
+        root.layout(Point(contentPane.width, contentPane.height))
     }
 
     override fun mouseReleased(p0: MouseEvent?) {
