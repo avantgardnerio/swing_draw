@@ -4,10 +4,23 @@ import java.awt.Color
 import java.awt.Graphics2D
 import java.awt.Point
 
-class Panel : Widget {
+class GridPanel : Widget {
+    private var backgroundColor = Color.GRAY
     private var innerRect = Rect(Point(0, 0), Point(0, 0))
     private var outerRect = Rect(Point(0, 0), Point(0, 0))
     private val children = mutableListOf<Widget>()
+
+    fun setBackgroundColor(color: Color) {
+        backgroundColor = color
+    }
+
+    override fun setInnerRect(rect: Rect) {
+        innerRect = rect
+    }
+
+    override fun setOuterRect(rect: Rect) {
+        outerRect = rect
+    }
 
     override fun getChildren(): List<Widget> {
         return children
@@ -30,10 +43,15 @@ class Panel : Widget {
         outerRect.size.y = size.y
         innerRect.size.x = size.x
         innerRect.size.y = size.y
+        children.forEach { child ->
+            child.setOuterRect(Rect(Point(size.x / 4, size.y / 4), Point(size.x * 4 / 3, size.y * 4 / 3)))
+            child.setInnerRect(Rect(Point(0,0), Point(size.x / 2, size.y / 2)))
+        }
     }
 
     override fun paint(graphics: Graphics2D, width: Int, height: Int) {
-        graphics.color = Color.GRAY
+        println("Drawing $backgroundColor origin=${innerRect.origin} size=${innerRect.size}")
+        graphics.color = backgroundColor
         graphics.fillRect(innerRect.origin.x, innerRect.origin.y, innerRect.size.x, innerRect.size.y)
 
         graphics.color = Color.WHITE
