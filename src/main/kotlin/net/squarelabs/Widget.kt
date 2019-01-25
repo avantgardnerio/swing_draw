@@ -1,6 +1,7 @@
 package net.squarelabs
 
 import java.awt.Graphics2D
+import java.awt.Point
 
 interface Widget {
     // children
@@ -19,6 +20,8 @@ interface Widget {
 
     // layout
     fun layout(rect: Rect) {
+        setOuterRect(rect)
+        setInnerRect(Rect(Point(0, 0), Point(rect.size.x, rect.size.y)))
         getChildren().forEach { child ->
             child.layout(rect)
         }

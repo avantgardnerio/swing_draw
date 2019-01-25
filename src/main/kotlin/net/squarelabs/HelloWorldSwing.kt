@@ -8,10 +8,13 @@ fun main() {
     red.setInnerRect(Rect(Point(0,0), Point(1000, 1000)))
     red.setBackgroundColor(Color.RED)
 
+    val redScroll = ScrollPanel()
+    red.addChild(redScroll)
+
     val green = GridPanel()
     green.setInnerRect(Rect(Point(0,0), Point(1000, 1000)))
     green.setBackgroundColor(Color.GREEN)
-    red.addChild(green)
+    redScroll.addChild(green)
 
     val blue = GridPanel()
     blue.setInnerRect(Rect(Point(0,0), Point(1000, 1000)))
