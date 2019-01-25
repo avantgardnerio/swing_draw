@@ -20,7 +20,7 @@ interface Widget {
     fun getOuterRect(): Rect
 
     // layout
-    fun layout(size: Point)
+    fun layout(rect: Rect)
 
     // painting
     fun paint(graphics: Graphics2D, width: Int, height: Int) {

@@ -3,12 +3,16 @@ package net.squarelabs
 import java.awt.Color
 
 fun main() {
-    val outer = GridPanel()
-    outer.setBackgroundColor(Color.BLUE)
+    val red = GridPanel()
+    red.setBackgroundColor(Color.RED)
 
-    val inner = GridPanel()
-    inner.setBackgroundColor(Color.RED)
-    outer.addChild(inner)
+    val green = GridPanel()
+    green.setBackgroundColor(Color.GREEN)
+    red.addChild(green)
 
-    DrawingWindow(outer)
+    val blue = GridPanel()
+    blue.setBackgroundColor(Color.BLUE)
+    green.addChild(blue)
+
+    DrawingWindow(red)
 }

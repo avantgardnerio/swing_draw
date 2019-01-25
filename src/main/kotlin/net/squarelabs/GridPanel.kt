@@ -38,14 +38,14 @@ class GridPanel : Widget {
         return outerRect
     }
 
-    override fun layout(size: Point) {
-        outerRect.size.x = size.x
-        outerRect.size.y = size.y
-        innerRect.size.x = size.x
-        innerRect.size.y = size.y
+    override fun layout(rect: Rect) {
+        outerRect = rect
+        innerRect.size.x = rect.size.x
+        innerRect.size.y = rect.size.y
         children.forEach { child ->
-            child.setOuterRect(Rect(Point(size.x / 4, size.y / 4), Point(size.x * 4 / 3, size.y * 4 / 3)))
-            child.setInnerRect(Rect(Point(0,0), Point(size.x / 2, size.y / 2)))
+            val origin = Point(rect.size.x / 4, rect.size.y / 4)
+            val size = Point(rect.size.x / 2, rect.size.y / 2)
+            child.layout(Rect(origin, size))
         }
     }
 

@@ -29,7 +29,9 @@ class DrawingWindow(var root: Widget) : JFrame(), MouseListener, MouseMotionList
 
     override fun componentResized(me: ComponentEvent?) {
         println("componentResized")
-        root.layout(Point(contentPane.width, contentPane.height))
+        val origin = Point(0, 0)
+        val size = Point(contentPane.width, contentPane.height)
+        root.layout(Rect(origin, size))
     }
 
     override fun mouseReleased(p0: MouseEvent?) {
