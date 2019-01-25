@@ -40,8 +40,6 @@ class GridPanel : Widget {
 
     override fun layout(rect: Rect) {
         outerRect = rect
-        innerRect.size.x = rect.size.x
-        innerRect.size.y = rect.size.y
         children.forEach { child ->
             val origin = Point(rect.size.x / 4, rect.size.y / 4)
             val size = Point(rect.size.x / 2, rect.size.y / 2)
