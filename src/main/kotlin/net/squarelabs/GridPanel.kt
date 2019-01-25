@@ -1,6 +1,7 @@
 package net.squarelabs
 
 import java.awt.Color
+import java.awt.Font
 import java.awt.Graphics2D
 import java.awt.Point
 
@@ -9,6 +10,8 @@ class GridPanel : Widget {
     private var innerRect = Rect(Point(0, 0), Point(0, 0))
     private var outerRect = Rect(Point(0, 0), Point(0, 0))
     private val children = mutableListOf<Widget>()
+    private val gridSize = 25
+    private val font = Font("Courier New", Font.PLAIN, gridSize)
 
     fun setBackgroundColor(color: Color) {
         backgroundColor = color
@@ -53,10 +56,13 @@ class GridPanel : Widget {
         graphics.fillRect(innerRect.origin.x, innerRect.origin.y, innerRect.size.x, innerRect.size.y)
 
         graphics.color = Color.WHITE
-        (innerRect.origin.y..innerRect.origin.y + innerRect.size.y step 10).forEach { y ->
+        graphics.font = font
+        (innerRect.origin.y..innerRect.origin.y + innerRect.size.y step gridSize).forEach { y ->
+            graphics.drawString("$y", 0, y + gridSize)
             graphics.drawLine(innerRect.origin.x, y, innerRect.origin.x + innerRect.size.x, y)
         }
-        (innerRect.origin.x..innerRect.origin.x + innerRect.size.x step 10).forEach { x ->
+        (innerRect.origin.x..innerRect.origin.x + innerRect.size.x step gridSize).forEach { x ->
+            if(x % 4 == 0) graphics.drawString("$x", x, 0 + gridSize)
             graphics.drawLine(x, innerRect.origin.y, x, innerRect.origin.y + innerRect.size.y)
         }
 
