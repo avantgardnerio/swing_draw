@@ -31,14 +31,16 @@ interface Widget {
     // painting
     fun paint(graphics: Graphics2D, width: Int, height: Int) {
         getChildren().forEach { c ->
+            val prevClip = graphics.clip
             graphics.translate(c.getBounds().origin.x, c.getBounds().origin.y)
-            //graphics.clipRect(0, 0, c.getBounds().size.x, c.getBounds().size.y)
+            graphics.clipRect(0, 0, c.getBounds().size.x, c.getBounds().size.y)
 
             val w = Math.min(width, c.getBounds().size.x)
             val h = Math.min(height, c.getBounds().size.y)
             c.paint(graphics, w, h)
 
             graphics.translate(-c.getBounds().origin.x, -c.getBounds().origin.y)
+            graphics.clip = prevClip
         }
     }
 }

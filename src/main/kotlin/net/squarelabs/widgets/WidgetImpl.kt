@@ -17,7 +17,6 @@ class WidgetImpl : Widget {
 
     override fun addChild(child: Widget) {
         children.add(child)
-        layout(bounds)
     }
 
     override fun getBounds(): Rect {

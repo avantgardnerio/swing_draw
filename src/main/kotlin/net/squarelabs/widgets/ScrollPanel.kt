@@ -27,8 +27,8 @@ class ScrollPanel : Widget {
             val sliderSize = Point(((barSize.x - 2) * ratio).toInt(), scrollBarWidth - 2)
             val sliderOrigin = Point(1, barOrigin.y + 1)
             println("hScroll ${childBounds.size.x}/${getBounds().size.x} hSize=$ratio ${sliderSize.x}/${barSize.x}")
-            GraphUtils.drawEmbossedRect(graphics, Rect(barOrigin, barSize), true)
-            GraphUtils.drawEmbossedRect(graphics, Rect(sliderOrigin, sliderSize), false)
+            GraphUtils.drawEmbossedRect(graphics, Rect(barOrigin, barSize), true, Color.DARK_GRAY)
+            GraphUtils.drawEmbossedRect(graphics, Rect(sliderOrigin, sliderSize), false, Color.GRAY)
         }
 
         // vertical
@@ -39,8 +39,8 @@ class ScrollPanel : Widget {
             val sliderSize = Point(scrollBarWidth - 2, ((barSize.y - 2) * ratio).toInt())
             val sliderOrigin = Point(barOrigin.x + 1, 1)
             println("vScroll ${childBounds.size.y}/${getBounds().size.y} hSize=$ratio ${sliderSize.y}/${barSize.y}")
-            GraphUtils.drawEmbossedRect(graphics, Rect(barOrigin, barSize), true)
-            GraphUtils.drawEmbossedRect(graphics, Rect(sliderOrigin, sliderSize), false)
+            GraphUtils.drawEmbossedRect(graphics, Rect(barOrigin, barSize), true, Color.DARK_GRAY)
+            GraphUtils.drawEmbossedRect(graphics, Rect(sliderOrigin, sliderSize), false, Color.GRAY)
         }
     }
 
