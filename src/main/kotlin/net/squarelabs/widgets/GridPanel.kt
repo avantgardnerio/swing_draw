@@ -1,5 +1,6 @@
-package net.squarelabs
+package net.squarelabs.widgets
 
+import net.squarelabs.Rect
 import java.awt.Color
 import java.awt.Font
 import java.awt.Graphics2D
@@ -16,7 +17,7 @@ class GridPanel : Widget {
     }
 
     override fun layout(rect: Rect) {
-        setOuterRect(rect)
+        super.layout(rect)
         getChildren().forEach { child ->
             val origin = Point(rect.size.x / 4, rect.size.y / 4)
             val size = Point(rect.size.x / 2, rect.size.y / 2)
@@ -25,19 +26,19 @@ class GridPanel : Widget {
     }
 
     override fun paint(graphics: Graphics2D, width: Int, height: Int) {
-        println("Drawing $backgroundColor origin=${getInnerRect().origin} size=${getInnerRect().size}")
+        println("Drawing $backgroundColor origin=${getBounds().origin} size=${getBounds().size}")
         graphics.color = backgroundColor
-        graphics.fillRect(getInnerRect().origin.x, getInnerRect().origin.y, getInnerRect().size.x, getInnerRect().size.y)
+        graphics.fillRect(getBounds().origin.x, getBounds().origin.y, getBounds().size.x, getBounds().size.y)
 
         graphics.color = Color.WHITE
         graphics.font = font
-        (getInnerRect().origin.y..getInnerRect().origin.y + getInnerRect().size.y step gridSize).forEach { y ->
+        (getBounds().origin.y..getBounds().origin.y + getBounds().size.y step gridSize).forEach { y ->
             graphics.drawString("$y", 0, y + gridSize)
-            graphics.drawLine(getInnerRect().origin.x, y, getInnerRect().origin.x + getInnerRect().size.x, y)
+            graphics.drawLine(getBounds().origin.x, y, getBounds().origin.x + getBounds().size.x, y)
         }
-        (getInnerRect().origin.x..getInnerRect().origin.x + getInnerRect().size.x step gridSize).forEach { x ->
+        (getBounds().origin.x..getBounds().origin.x + getBounds().size.x step gridSize).forEach { x ->
             if(x % 4 == 0) graphics.drawString("$x", x, 0 + gridSize)
-            graphics.drawLine(x, getInnerRect().origin.y, x, getInnerRect().origin.y + getInnerRect().size.y)
+            graphics.drawLine(x, getBounds().origin.y, x, getBounds().origin.y + getBounds().size.y)
         }
 
         super.paint(graphics, width, height)
@@ -52,19 +53,11 @@ class GridPanel : Widget {
         widget.addChild(child)
     }
 
-    override fun setInnerRect(rect: Rect) {
-        widget.setInnerRect(rect)
+    override fun setBounds(rect: Rect) {
+        widget.setBounds(rect)
     }
 
-    override fun setOuterRect(rect: Rect) {
-        widget.setOuterRect(rect)
-    }
-
-    override fun getInnerRect(): Rect {
-        return widget.getInnerRect()
-    }
-
-    override fun getOuterRect(): Rect {
-        return widget.getOuterRect()
+    override fun getBounds(): Rect {
+        return widget.getBounds()
     }
 }
