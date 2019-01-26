@@ -7,6 +7,11 @@ import java.awt.Color
 import java.awt.Graphics2D
 
 class ScrollPanel : Widget {
+    override var children: MutableList<Widget>
+        get() = widget.children
+        set(value) {
+            widget.children = value
+        }
     override var bounds: Rect
         get() = widget.bounds
         set(value) {
@@ -41,8 +46,8 @@ class ScrollPanel : Widget {
     })
 
     init {
-        addChild(hScroll)
-        addChild(vScroll)
+        children.add(hScroll)
+        children.add(vScroll)
     }
 
     override fun layout(rect: Rect) {
@@ -60,14 +65,5 @@ class ScrollPanel : Widget {
 
         paintChild(graphics, width, height, hScroll)
         paintChild(graphics, width, height, vScroll)
-    }
-
-    // Widget
-    override fun getChildren(): List<Widget> {
-        return widget.getChildren()
-    }
-
-    override fun addChild(child: Widget) {
-        widget.addChild(child)
     }
 }

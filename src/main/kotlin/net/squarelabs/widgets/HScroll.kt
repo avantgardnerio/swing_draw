@@ -9,6 +9,11 @@ import java.awt.Graphics2D
 import java.awt.Point
 
 class HScroll(val dataSource: ScalarSource) : Widget {
+    override var children: MutableList<Widget>
+        get() = widget.children
+        set(value) {
+            widget.children = value
+        }
     override var bounds: Rect
         get() = widget.bounds
         set(value) {
@@ -52,11 +57,11 @@ class HScroll(val dataSource: ScalarSource) : Widget {
     }
 
     override fun mouseMoved(position: Point) {
-        if(downPos == null || downOrigin == null) return
+        if (downPos == null || downOrigin == null) return
         println("draggin")
         origin = Point(
-            downOrigin!!.x + position.x - downPos!!.x,
-            downOrigin!!.y + position.y - downPos!!.y
+                downOrigin!!.x + position.x - downPos!!.x,
+                downOrigin!!.y + position.y - downPos!!.y
         )
     }
 
@@ -64,14 +69,5 @@ class HScroll(val dataSource: ScalarSource) : Widget {
         println("up")
         downPos = null
         downOrigin = null
-    }
-
-    // widget
-    override fun getChildren(): List<Widget> {
-        return widget.getChildren()
-    }
-
-    override fun addChild(child: Widget) {
-        widget.addChild(child)
     }
 }

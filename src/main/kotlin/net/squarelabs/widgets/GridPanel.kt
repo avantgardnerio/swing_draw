@@ -9,6 +9,11 @@ import java.awt.Point
 class GridPanel(
         cb: (it: GridPanel) -> Unit
 ) : Widget {
+    override var children: MutableList<Widget>
+        get() = widget.children
+        set(value) {
+            widget.children = value
+        }
     override var bounds: Rect
         get() = widget.bounds
         set(value) {
@@ -25,7 +30,7 @@ class GridPanel(
 
     override fun layout(rect: Rect) {
         super.layout(rect)
-        getChildren().forEach { child ->
+        children.forEach { child ->
             val origin = Point(rect.size.x / 4, rect.size.y / 4)
             val size = Point(rect.size.x / 2, rect.size.y / 2)
             child.layout(Rect(origin, size))
@@ -49,14 +54,5 @@ class GridPanel(
         }
 
         super.paint(graphics, width, height)
-    }
-
-    // Widget
-    override fun getChildren(): List<Widget> {
-        return widget.getChildren()
-    }
-
-    override fun addChild(child: Widget) {
-        widget.addChild(child)
     }
 }

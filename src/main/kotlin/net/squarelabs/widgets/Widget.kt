@@ -7,9 +7,7 @@ import java.awt.event.MouseEvent
 
 interface Widget {
     // children
-    fun getChildren(): List<Widget>
-
-    fun addChild(child: Widget)
+    var children: MutableList<Widget>
 
     // coordinate system
     var bounds: Rect
@@ -20,7 +18,7 @@ interface Widget {
     }
 
     fun getChildBounds(): Rect {
-        return getChildren().fold(Rect.MIN) { acc, cur ->
+        return children.fold(Rect.MIN) { acc, cur ->
             Rect.union(
                 acc,
                 cur.bounds
@@ -43,12 +41,12 @@ interface Widget {
 
     // painting
     fun paint(graphics: Graphics2D, width: Int, height: Int) {
-        getChildren().forEach { paintChild(graphics, width, height, it) }
+        children.forEach { paintChild(graphics, width, height, it) }
     }
 
     // events
     fun mousePressed(position: Point) {
-        getChildren().forEach { child ->
+        children.forEach { child ->
             val bounds = child.bounds
             if(bounds.contains(position)) {
                 child.mousePressed(bounds.toLocal(position))
@@ -57,7 +55,7 @@ interface Widget {
     }
 
     fun mouseMoved(position: Point) {
-        getChildren().forEach { child ->
+        children.forEach { child ->
             val bounds = child.bounds
             if(bounds.contains(position)) {
                 child.mouseMoved(bounds.toLocal(position))
@@ -66,7 +64,7 @@ interface Widget {
     }
 
     fun mouseReleased(position: Point) {
-        getChildren().forEach { child ->
+        children.forEach { child ->
             val bounds = child.bounds
             if(bounds.contains(position)) {
                 child.mouseReleased(bounds.toLocal(position))
