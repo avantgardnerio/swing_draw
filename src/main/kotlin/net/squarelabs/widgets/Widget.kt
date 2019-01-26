@@ -2,6 +2,8 @@ package net.squarelabs.widgets
 
 import net.squarelabs.Rect
 import java.awt.Graphics2D
+import java.awt.Point
+import java.awt.event.MouseEvent
 
 interface Widget {
     // children
@@ -44,5 +46,33 @@ interface Widget {
     // painting
     fun paint(graphics: Graphics2D, width: Int, height: Int) {
         getChildren().forEach { paintChild(graphics, width, height, it) }
+    }
+
+    // events
+    fun mousePressed(position: Point) {
+        getChildren().forEach { child ->
+            val bounds = child.getBounds()
+            if(bounds.contains(position)) {
+                child.mousePressed(bounds.toLocal(position))
+            }
+        }
+    }
+
+    fun mouseMoved(position: Point) {
+        getChildren().forEach { child ->
+            val bounds = child.getBounds()
+            if(bounds.contains(position)) {
+                child.mouseMoved(bounds.toLocal(position))
+            }
+        }
+    }
+
+    fun mouseReleased(position: Point) {
+        getChildren().forEach { child ->
+            val bounds = child.getBounds()
+            if(bounds.contains(position)) {
+                child.mouseReleased(bounds.toLocal(position))
+            }
+        }
     }
 }

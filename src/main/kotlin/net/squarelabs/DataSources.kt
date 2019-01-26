@@ -7,3 +7,7 @@ interface ScalarSource {
 
     fun getValue(): Double
 }
+
+interface ScalarListener {
+    fun onChange(value: Double)
+}

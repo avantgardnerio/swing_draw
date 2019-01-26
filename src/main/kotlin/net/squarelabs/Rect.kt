@@ -3,6 +3,19 @@ package net.squarelabs
 import java.awt.Point
 
 data class Rect(val origin: Point, val size: Point) {
+
+    fun contains(p: Point): Boolean {
+        if(p.x < origin.x) return false
+        if(p.y < origin.y) return false
+        if(p.x > origin.x + size.x) return false
+        if(p.y > origin.y + size.y) return false
+        return true
+    }
+
+    fun toLocal(p: Point): Point {
+        return Point(p.x - origin.x, p.y - origin.y)
+    }
+
     companion object {
         val MIN = Rect(Point(Int.MAX_VALUE, Int.MAX_VALUE), Point(Int.MIN_VALUE, Int.MIN_VALUE))
 

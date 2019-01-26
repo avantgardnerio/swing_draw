@@ -17,13 +17,15 @@ class DrawingWindow(var root: Widget) : JFrame(), MouseListener, MouseMotionList
         isVisible = true
     }
 
+    fun getTop(): Int {
+        return height - contentPane.height
+    }
+
     override fun paint(graphics: Graphics?) {
         val g = graphics as Graphics2D
-        val top = height - contentPane.height
-
-        g.translate(0, top) // don't draw behind OS title bar
+        g.translate(0, getTop()) // don't draw behind OS title bar
         g.translate(root.getBounds().origin.x, root.getBounds().origin.y)
-        //g.clipRect(0, 0, root.getBounds().size.x, root.getBounds().size.y)
+        g.clipRect(0, 0, root.getBounds().size.x, root.getBounds().size.y)
         root.paint(g, width, height)
     }
 
@@ -32,10 +34,6 @@ class DrawingWindow(var root: Widget) : JFrame(), MouseListener, MouseMotionList
         val origin = Point(0, 0)
         val size = Point(contentPane.width, contentPane.height)
         root.layout(Rect(origin, size))
-    }
-
-    override fun mouseReleased(p0: MouseEvent?) {
-        println("mouseReleased")
     }
 
     override fun mouseEntered(p0: MouseEvent?) {
@@ -50,13 +48,16 @@ class DrawingWindow(var root: Widget) : JFrame(), MouseListener, MouseMotionList
         println("mouseExited")
     }
 
-    override fun mousePressed(p0: MouseEvent?) {
-        println("mousePressed")
+    override fun mousePressed(event: MouseEvent?) {
+        root.mousePressed(Point(event!!.x, event.y - getTop()))
     }
 
-    override fun mouseMoved(p0: MouseEvent?) {
-        //println("mouseMoved")
-        //repaint()
+    override fun mouseMoved(event: MouseEvent?) {
+        root.mouseMoved(Point(event!!.x, event.y - getTop()))
+    }
+
+    override fun mouseReleased(event: MouseEvent?) {
+        root.mouseReleased(Point(event!!.x, event.y - getTop()))
     }
 
     override fun mouseDragged(p0: MouseEvent?) {
