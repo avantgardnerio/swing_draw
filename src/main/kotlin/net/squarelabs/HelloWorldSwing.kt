@@ -8,14 +8,14 @@ import java.awt.Point
 fun main() {
     val red = GridPanel {
         it.bounds = Rect(Point(0,0), Point(1000, 1000))
-        it.setBackgroundColor(Color.RED)
+        it.backgroundColor = Color.RED
     }
 
     val redScroll = ScrollPanel()
     red.addChild(redScroll)
 
     val green = GridPanel {
-        it.setBackgroundColor(Color.GREEN)
+        it.backgroundColor = Color.GREEN
     }
     redScroll.addChild(green)
 
@@ -25,7 +25,7 @@ fun main() {
 
     val blue = GridPanel {
         it.bounds = Rect(Point(0,0), Point(1000, 1000))
-        it.setBackgroundColor(Color.BLUE)
+        it.backgroundColor = Color.BLUE
     }
     greenScroll.addChild(blue)
 

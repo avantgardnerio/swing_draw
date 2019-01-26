@@ -6,23 +6,21 @@ import java.awt.Font
 import java.awt.Graphics2D
 import java.awt.Point
 
-class GridPanel(val cb: (it: GridPanel) -> Unit) : Widget {
+class GridPanel(
+        cb: (it: GridPanel) -> Unit
+) : Widget {
     override var bounds: Rect
         get() = widget.bounds
         set(value) {
             widget.bounds = value
         }
+    var backgroundColor = Color.GRAY
     private val widget = WidgetImpl()
-    private var backgroundColor = Color.GRAY
     private val gridSize = 25
     private val font = Font("Courier New", Font.PLAIN, gridSize)
 
     init {
         cb(this)
-    }
-
-    fun setBackgroundColor(color: Color) {
-        backgroundColor = color
     }
 
     override fun layout(rect: Rect) {
