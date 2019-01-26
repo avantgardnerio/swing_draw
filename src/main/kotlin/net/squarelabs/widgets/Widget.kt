@@ -28,19 +28,21 @@ interface Widget {
         }
     }
 
+    fun paintChild(graphics: Graphics2D, width: Int, height: Int, child: Widget) {
+        val prevClip = graphics.clip
+        graphics.translate(child.getBounds().origin.x, child.getBounds().origin.y)
+        graphics.clipRect(0, 0, child.getBounds().size.x, child.getBounds().size.y)
+
+        val w = Math.min(width, child.getBounds().size.x)
+        val h = Math.min(height, child.getBounds().size.y)
+        child.paint(graphics, w, h)
+
+        graphics.translate(-child.getBounds().origin.x, -child.getBounds().origin.y)
+        graphics.clip = prevClip
+    }
+
     // painting
     fun paint(graphics: Graphics2D, width: Int, height: Int) {
-        getChildren().forEach { c ->
-            val prevClip = graphics.clip
-            graphics.translate(c.getBounds().origin.x, c.getBounds().origin.y)
-            graphics.clipRect(0, 0, c.getBounds().size.x, c.getBounds().size.y)
-
-            val w = Math.min(width, c.getBounds().size.x)
-            val h = Math.min(height, c.getBounds().size.y)
-            c.paint(graphics, w, h)
-
-            graphics.translate(-c.getBounds().origin.x, -c.getBounds().origin.y)
-            graphics.clip = prevClip
-        }
+        getChildren().forEach { paintChild(graphics, width, height, it) }
     }
 }
