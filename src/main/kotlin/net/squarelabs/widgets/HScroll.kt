@@ -12,7 +12,9 @@ class HScroll(val dataSource: ScalarSource) : Widget {
     private val scrollBarWidth = 15
     private val widget = WidgetImpl()
     private val listeners = mutableListOf<ScalarListener>()
-    private var dragging = false
+    private var downPos: Point? = null
+    private var downOrigin: Point? = null
+    private var origin = Point(0, 0)
 
     override fun layout(rect: Rect) {
         val origin = Point(0, rect.size.y - scrollBarWidth - 1)
@@ -39,13 +41,24 @@ class HScroll(val dataSource: ScalarSource) : Widget {
     }
 
     override fun mousePressed(position: Point) {
-        dragging = true
+        println("down")
+        downPos = position
+        downOrigin = origin
+    }
+
+    override fun mouseMoved(position: Point) {
+        if(downPos == null || downOrigin == null) return
         println("draggin")
+        origin = Point(
+            downOrigin!!.x + position.x - downPos!!.x,
+            downOrigin!!.y + position.y - downPos!!.y
+        )
     }
 
     override fun mouseReleased(position: Point) {
-        dragging = false
-        println("undrag")
+        println("up")
+        downPos = null
+        downOrigin = null
     }
 
     // widget

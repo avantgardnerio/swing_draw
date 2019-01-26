@@ -56,12 +56,12 @@ class DrawingWindow(var root: Widget) : JFrame(), MouseListener, MouseMotionList
         root.mouseMoved(Point(event!!.x, event.y - getTop()))
     }
 
-    override fun mouseReleased(event: MouseEvent?) {
-        root.mouseReleased(Point(event!!.x, event.y - getTop()))
+    override fun mouseDragged(event: MouseEvent?) {
+        root.mouseMoved(Point(event!!.x, event.y - getTop()))
     }
 
-    override fun mouseDragged(p0: MouseEvent?) {
-        //println("mouseDragged")
+    override fun mouseReleased(event: MouseEvent?) {
+        root.mouseReleased(Point(event!!.x, event.y - getTop()))
     }
 
     override fun keyTyped(p0: KeyEvent?) {
