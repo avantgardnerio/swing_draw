@@ -3,13 +3,10 @@ package net.squarelabs.widgets
 import net.squarelabs.Rect
 import java.awt.Point
 
-class WidgetImpl : Widget {
-    private var bounds = Rect(Point(0, 0), Point(0, 0))
+class WidgetImpl(
+        override var bounds: Rect = Rect(Point(0, 0), Point(0, 0))
+) : Widget {
     private val children = mutableListOf<Widget>()
-
-    override fun setBounds(rect: Rect) {
-        bounds = rect
-    }
 
     override fun getChildren(): List<Widget> {
         return children
@@ -17,9 +14,5 @@ class WidgetImpl : Widget {
 
     override fun addChild(child: Widget) {
         children.add(child)
-    }
-
-    override fun getBounds(): Rect {
-        return bounds
     }
 }

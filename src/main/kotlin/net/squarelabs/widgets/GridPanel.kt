@@ -6,11 +6,20 @@ import java.awt.Font
 import java.awt.Graphics2D
 import java.awt.Point
 
-class GridPanel : Widget {
+class GridPanel(val cb: (it: GridPanel) -> Unit) : Widget {
+    override var bounds: Rect
+        get() = widget.bounds
+        set(value) {
+            widget.bounds = value
+        }
     private val widget = WidgetImpl()
     private var backgroundColor = Color.GRAY
     private val gridSize = 25
     private val font = Font("Courier New", Font.PLAIN, gridSize)
+
+    init {
+        cb(this)
+    }
 
     fun setBackgroundColor(color: Color) {
         backgroundColor = color
@@ -26,19 +35,19 @@ class GridPanel : Widget {
     }
 
     override fun paint(graphics: Graphics2D, width: Int, height: Int) {
-        println("Drawing $backgroundColor origin=${getBounds().origin} size=${getBounds().size}")
+        println("Drawing $backgroundColor origin=${bounds.origin} size=${bounds.size}")
         graphics.color = backgroundColor
-        graphics.fillRect(getBounds().origin.x, getBounds().origin.y, getBounds().size.x, getBounds().size.y)
+        graphics.fillRect(bounds.origin.x, bounds.origin.y, bounds.size.x, bounds.size.y)
 
         graphics.color = Color.WHITE
         graphics.font = font
-        (getBounds().origin.y..getBounds().origin.y + getBounds().size.y step gridSize).forEach { y ->
+        (bounds.origin.y..bounds.origin.y + bounds.size.y step gridSize).forEach { y ->
             graphics.drawString("$y", 0, y + gridSize)
-            graphics.drawLine(getBounds().origin.x, y, getBounds().origin.x + getBounds().size.x, y)
+            graphics.drawLine(bounds.origin.x, y, bounds.origin.x + bounds.size.x, y)
         }
-        (getBounds().origin.x..getBounds().origin.x + getBounds().size.x step gridSize).forEach { x ->
-            if(x % 4 == 0) graphics.drawString("$x", x, 0 + gridSize)
-            graphics.drawLine(x, getBounds().origin.y, x, getBounds().origin.y + getBounds().size.y)
+        (bounds.origin.x..bounds.origin.x + bounds.size.x step gridSize).forEach { x ->
+            if (x % 4 == 0) graphics.drawString("$x", x, 0 + gridSize)
+            graphics.drawLine(x, bounds.origin.y, x, bounds.origin.y + bounds.size.y)
         }
 
         super.paint(graphics, width, height)
@@ -51,13 +60,5 @@ class GridPanel : Widget {
 
     override fun addChild(child: Widget) {
         widget.addChild(child)
-    }
-
-    override fun setBounds(rect: Rect) {
-        widget.setBounds(rect)
-    }
-
-    override fun getBounds(): Rect {
-        return widget.getBounds()
     }
 }

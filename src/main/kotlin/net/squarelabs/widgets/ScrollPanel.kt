@@ -7,6 +7,11 @@ import java.awt.Color
 import java.awt.Graphics2D
 
 class ScrollPanel : Widget {
+    override var bounds: Rect
+        get() = widget.bounds
+        set(value) {
+            widget.bounds = value
+        }
     private val widget = WidgetImpl()
     private val hScroll = HScroll(object : ScalarSource {
         override fun getMin(): Double {
@@ -47,11 +52,11 @@ class ScrollPanel : Widget {
     }
 
     override fun paint(graphics: Graphics2D, width: Int, height: Int) {
-        println("ScrollPanel $width $height ${getBounds()} ${getBounds()}")
+        println("ScrollPanel $width $height ${bounds} ${bounds}")
         super.paint(graphics, width, height)
 
         graphics.color = Color.DARK_GRAY
-        graphics.drawRect(0, 0, getBounds().size.x - 1, getBounds().size.y - 1)
+        graphics.drawRect(0, 0, bounds.size.x - 1, bounds.size.y - 1)
 
         paintChild(graphics, width, height, hScroll)
         paintChild(graphics, width, height, vScroll)
@@ -64,13 +69,5 @@ class ScrollPanel : Widget {
 
     override fun addChild(child: Widget) {
         widget.addChild(child)
-    }
-
-    override fun setBounds(rect: Rect) {
-        widget.setBounds(rect)
-    }
-
-    override fun getBounds(): Rect {
-        return widget.getBounds()
     }
 }

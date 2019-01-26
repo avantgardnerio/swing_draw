@@ -12,34 +12,32 @@ interface Widget {
     fun addChild(child: Widget)
 
     // coordinate system
-    fun setBounds(rect: Rect)
-
-    fun getBounds(): Rect
+    var bounds: Rect
 
     // layout
     fun layout(rect: Rect) {
-        setBounds(rect)
+        bounds = rect
     }
 
     fun getChildBounds(): Rect {
         return getChildren().fold(Rect.MIN) { acc, cur ->
             Rect.union(
                 acc,
-                cur.getBounds()
-            )
+                cur.bounds
+            )             
         }
     }
 
     fun paintChild(graphics: Graphics2D, width: Int, height: Int, child: Widget) {
         val prevClip = graphics.clip
-        graphics.translate(child.getBounds().origin.x, child.getBounds().origin.y)
-        graphics.clipRect(0, 0, child.getBounds().size.x, child.getBounds().size.y)
+        graphics.translate(child.bounds.origin.x, child.bounds.origin.y)
+        graphics.clipRect(0, 0, child.bounds.size.x, child.bounds.size.y)
 
-        val w = Math.min(width, child.getBounds().size.x)
-        val h = Math.min(height, child.getBounds().size.y)
+        val w = Math.min(width, child.bounds.size.x)
+        val h = Math.min(height, child.bounds.size.y)
         child.paint(graphics, w, h)
 
-        graphics.translate(-child.getBounds().origin.x, -child.getBounds().origin.y)
+        graphics.translate(-child.bounds.origin.x, -child.bounds.origin.y)
         graphics.clip = prevClip
     }
 
@@ -51,7 +49,7 @@ interface Widget {
     // events
     fun mousePressed(position: Point) {
         getChildren().forEach { child ->
-            val bounds = child.getBounds()
+            val bounds = child.bounds
             if(bounds.contains(position)) {
                 child.mousePressed(bounds.toLocal(position))
             }
@@ -60,7 +58,7 @@ interface Widget {
 
     fun mouseMoved(position: Point) {
         getChildren().forEach { child ->
-            val bounds = child.getBounds()
+            val bounds = child.bounds
             if(bounds.contains(position)) {
                 child.mouseMoved(bounds.toLocal(position))
             }
@@ -69,7 +67,7 @@ interface Widget {
 
     fun mouseReleased(position: Point) {
         getChildren().forEach { child ->
-            val bounds = child.getBounds()
+            val bounds = child.bounds
             if(bounds.contains(position)) {
                 child.mouseReleased(bounds.toLocal(position))
             }

@@ -24,8 +24,8 @@ class DrawingWindow(var root: Widget) : JFrame(), MouseListener, MouseMotionList
     override fun paint(graphics: Graphics?) {
         val g = graphics as Graphics2D
         g.translate(0, getTop()) // don't draw behind OS title bar
-        g.translate(root.getBounds().origin.x, root.getBounds().origin.y)
-        g.clipRect(0, 0, root.getBounds().size.x, root.getBounds().size.y)
+        g.translate(root.bounds.origin.x, root.bounds.origin.y)
+        g.clipRect(0, 0, root.bounds.size.x, root.bounds.size.y)
         root.paint(g, width, height)
     }
 
