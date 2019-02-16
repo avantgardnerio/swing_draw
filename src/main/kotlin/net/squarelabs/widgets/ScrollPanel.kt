@@ -24,31 +24,19 @@ class ScrollPanel : Widget {
     private val widget = WidgetImpl()
 
     private val hScroll = HScroll(object : ScalarSource {
-        override fun getMin(): Double {
-            return 0.0
-        }
+        override fun getMin(): Double { return 0.0 }
 
-        override fun getMax(): Double {
-            val left = getChildBounds().origin.x
-            val childSize = getChildBounds().size.x
-            val right = left + childSize
-            val mySize = bounds.size.x
-            val value = (childSize - mySize).toDouble()
-            println("---------childSize=$childSize mySize=$mySize left=$left right=$right")
-            return value
-        }
+        override fun getMax(): Double { return (getChildBounds().size.x - bounds.size.x).toDouble() }
 
-        override fun getValue(): Double {
-            return -getChildBounds().origin.getX()
-        }
+        override fun getValue(): Double { return -getChildBounds().origin.getX() }
     })
 
     private val vScroll = VScroll(object : ScalarSource {
         override fun getMin(): Double { return 0.0 }
 
-        override fun getMax(): Double { return getChildBounds().size.y.toDouble() }
+        override fun getMax(): Double { return (getChildBounds().size.y - bounds.size.y).toDouble() }
 
-        override fun getValue(): Double { return getChildBounds().origin.getY() }
+        override fun getValue(): Double { return -getChildBounds().origin.getY() }
     })
 
     init {
@@ -58,23 +46,22 @@ class ScrollPanel : Widget {
             override fun onChange(value: Double) {
                 children.forEach {
                     if(it != hScroll && it != vScroll) {
-                        println("set x=$value")
-                        val rect = Rect(Point(-value.toInt(), it.bounds.origin.y), it.bounds.size)
-                        it.layout(rect)
+                        it.layout(Rect(Point(-value.toInt(), it.bounds.origin.y), it.bounds.size))
                         listeners.forEach { it.invalidated(bounds) }
                     }
                 }
             }
         })
-    }
-
-    fun getChildrenBounds(): Rect {
-        val res = children.fold(Rect.MIN) { acc, cur ->
-            if(cur == hScroll || cur == vScroll) return acc
-            return Rect.union(acc, cur.bounds)
-        }
-        println("-------res=$res")
-        return res
+        vScroll.addScrollListener(object : ScalarListener {
+            override fun onChange(value: Double) {
+                children.forEach {
+                    if(it != hScroll && it != vScroll) {
+                        it.layout(Rect(Point(it.bounds.origin.x, -value.toInt()), it.bounds.size))
+                        listeners.forEach { it.invalidated(bounds) }
+                    }
+                }
+            }
+        })
     }
 
     override fun layout(rect: Rect) {

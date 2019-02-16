@@ -25,7 +25,7 @@ class VScroll(val dataSource: ScalarSource) : Widget {
     private val scrollBarWidth = 15
     private val widget = WidgetImpl()
     private val scrollListeners = mutableListOf<ScalarListener>()
-    private var dragging = false
+    private var downPos: Double? = null
 
     override fun layout(rect: Rect) {
         val origin = Point(rect.size.x - scrollBarWidth - 1, 0)
@@ -36,25 +36,43 @@ class VScroll(val dataSource: ScalarSource) : Widget {
     override fun paint(graphics: Graphics2D, width: Int, height: Int) {
         super.paint(graphics, width, height)
 
-        val range = dataSource.getMax() - dataSource.getMin()
-        val ratio = bounds.size.y / range
         val barOrigin = Point(0, 0)
         val barSize = Point(scrollBarWidth, bounds.size.y)
-        val sliderSize = Point(scrollBarWidth - 2, ((barSize.y - 2) * ratio).toInt())
-        val sliderOrigin = Point(barOrigin.x + 1, 1)
+        val sliderOrigin = Point(barOrigin.x + 1, sliderTop)
+        val sliderSize = Point(scrollBarWidth - 2, sliderHeight)
         GraphUtils.drawEmbossedRect(graphics, Rect(barOrigin, barSize), true, Color.DARK_GRAY)
         GraphUtils.drawEmbossedRect(graphics, Rect(sliderOrigin, sliderSize), false, Color.GRAY)
     }
 
-    fun addListener(listener: ScalarListener) {
+    val dataRange: Double
+        get() = dataSource.getMax() - dataSource.getMin()
+
+    val sliderHeight: Int
+        get() = ((bounds.size.y - 2) * (bounds.size.y / dataRange)).toInt()
+
+    val sliderRange: Int
+        get() = bounds.size.y - sliderHeight
+
+    val sliderTop: Int
+        get() = (dataSource.getValue() / dataRange * sliderRange).toInt()
+
+    fun addScrollListener(listener: ScalarListener) {
         scrollListeners.add(listener)
     }
 
     override fun mousePressed(position: Point) {
-        dragging = true
+        downPos = (position.y - sliderTop).toDouble() / sliderHeight
+    }
+
+    override fun mouseMoved(position: Point) {
+        if (downPos == null) return
+        val newTop = position.y - sliderHeight * downPos!!
+        val newVal = (newTop / sliderRange) * dataRange + dataSource.getMin()
+        val clamped = Math.min(Math.max(newVal, dataSource.getMin()), dataSource.getMax())
+        scrollListeners.forEach { it.onChange(clamped) }
     }
 
     override fun mouseReleased(position: Point) {
-        dragging = false
+        downPos = null
     }
 }

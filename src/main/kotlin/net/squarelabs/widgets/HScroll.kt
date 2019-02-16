@@ -56,7 +56,6 @@ class HScroll(val dataSource: ScalarSource) : Widget {
     val sliderLeft: Int
         get() = (dataSource.getValue() / dataRange * sliderRange).toInt()
 
-    // events
     fun addScrollListener(listener: ScalarListener) {
         scrollListeners.add(listener)
     }
