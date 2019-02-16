@@ -48,13 +48,23 @@ class GridPanel(
 
         graphics.color = Color.WHITE
         graphics.font = font
-        (bounds.origin.y..bounds.origin.y + bounds.size.y step gridSize).forEach { y ->
-            graphics.drawString("$y", 0, y + gridSize)
-            graphics.drawLine(bounds.origin.x, y, bounds.origin.x + bounds.size.x, y)
+        (0..bounds.size.y step gridSize).forEach { y ->
+            graphics.drawString("$y", 0, y + bounds.origin.y + gridSize)
+            graphics.drawLine(
+                    bounds.origin.x,
+                    y + bounds.origin.y,
+                    bounds.origin.x + bounds.size.x,
+                    y + bounds.origin.y
+            )
         }
-        (bounds.origin.x..bounds.origin.x + bounds.size.x step gridSize).forEach { x ->
-            if (x % 4 == 0) graphics.drawString("$x", x, 0 + gridSize)
-            graphics.drawLine(x, bounds.origin.y, x, bounds.origin.y + bounds.size.y)
+        (0..bounds.size.x step gridSize).forEach { x ->
+            if (x % 4 == 0) graphics.drawString("$x", x + bounds.origin.x, 0 + gridSize)
+            graphics.drawLine(
+                    x + bounds.origin.x,
+                    bounds.origin.y,
+                    x + bounds.origin.x,
+                    bounds.origin.y + bounds.size.y
+            )
         }
 
         super.paint(graphics, width, height)
