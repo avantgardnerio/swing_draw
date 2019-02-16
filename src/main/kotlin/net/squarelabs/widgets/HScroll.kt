@@ -22,9 +22,8 @@ class HScroll(val dataSource: ScalarSource) : Widget {
     private val scrollBarWidth = 15
     private val widget = WidgetImpl()
     private val listeners = mutableListOf<ScalarListener>()
-    private var downPos: Point? = null
-    private var downOrigin: Point? = null
-    private var origin = Point(0, 0)
+    private var downPos: Int? = null
+    private var downValue: Double? = null
 
     override fun layout(rect: Rect) {
         val origin = Point(0, rect.size.y - scrollBarWidth - 1)
@@ -35,8 +34,7 @@ class HScroll(val dataSource: ScalarSource) : Widget {
     override fun paint(graphics: Graphics2D, width: Int, height: Int) {
         super.paint(graphics, width, height)
 
-        val range = dataSource.getMax() - dataSource.getMin()
-        val ratio = bounds.size.x / range
+        val ratio = bounds.size.x / dataRange
         val barOrigin = Point(0, 0)
         val barSize = Point(bounds.size.x, scrollBarWidth)
         val sliderSize = Point(((barSize.x - 2) * ratio).toInt(), scrollBarWidth - 2)
@@ -45,6 +43,11 @@ class HScroll(val dataSource: ScalarSource) : Widget {
         GraphUtils.drawEmbossedRect(graphics, Rect(sliderOrigin, sliderSize), false, Color.GRAY)
     }
 
+    val dataRange: Double
+        get() = dataSource.getMax() - dataSource.getMin()
+
+    var sliderWidth: Int = ((bounds.size.x - 2) * bounds.size.x / dataRange).toInt()
+
     // events
     fun addListener(listener: ScalarListener) {
         listeners.add(listener)
@@ -52,22 +55,18 @@ class HScroll(val dataSource: ScalarSource) : Widget {
 
     override fun mousePressed(position: Point) {
         println("down")
-        downPos = position
-        downOrigin = origin
+        downPos = position.x
+        downValue = dataSource.getValue()
     }
 
     override fun mouseMoved(position: Point) {
-        if (downPos == null || downOrigin == null) return
+        if (downPos == null || downValue == null) return
         println("draggin")
-        origin = Point(
-                downOrigin!!.x + position.x - downPos!!.x,
-                downOrigin!!.y + position.y - downPos!!.y
-        )
     }
 
     override fun mouseReleased(position: Point) {
         println("up")
         downPos = null
-        downOrigin = null
+        downValue = null
     }
 }
