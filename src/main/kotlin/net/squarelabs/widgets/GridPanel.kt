@@ -35,7 +35,7 @@ class GridPanel(
     override fun layout(rect: Rect) {
         super.layout(rect)
         children.forEach { child ->
-            val origin = Point(rect.size.x / 4, rect.size.y / 4)
+            val origin = Point(rect.size.x / 4 + rect.origin.x, rect.size.y / 4 + rect.origin.y)
             val size = Point(rect.size.x / 2, rect.size.y / 2)
             child.layout(Rect(origin, size))
         }

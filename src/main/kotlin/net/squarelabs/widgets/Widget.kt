@@ -4,21 +4,15 @@ import net.squarelabs.Rect
 import net.squarelabs.listeners.WidgetListener
 import java.awt.Graphics2D
 import java.awt.Point
-import java.awt.event.MouseEvent
 
 interface Widget {
-    // children
-    var children: MutableList<Widget>
-
-    // coordinate system
     var bounds: Rect
+    var children: MutableList<Widget>
+    var listeners: MutableList<WidgetListener>
 
-    // layout
     fun layout(rect: Rect) {
         bounds = rect
     }
-
-    var listeners: MutableList<WidgetListener>
 
     fun addListener(listener: WidgetListener) {
         listeners.add(listener)
@@ -60,7 +54,7 @@ interface Widget {
     fun mousePressed(position: Point) {
         children.forEach { child ->
             val bounds = child.bounds
-            if(bounds.contains(position)) {
+            if (bounds.contains(position)) {
                 child.mousePressed(bounds.toLocal(position))
             }
         }
@@ -69,7 +63,7 @@ interface Widget {
     fun mouseMoved(position: Point) {
         children.forEach { child ->
             val bounds = child.bounds
-            if(bounds.contains(position)) {
+            if (bounds.contains(position)) {
                 child.mouseMoved(bounds.toLocal(position))
             }
         }
@@ -78,7 +72,7 @@ interface Widget {
     fun mouseReleased(position: Point) {
         children.forEach { child ->
             val bounds = child.bounds
-            if(bounds.contains(position)) {
+            if (bounds.contains(position)) {
                 child.mouseReleased(bounds.toLocal(position))
             }
         }
