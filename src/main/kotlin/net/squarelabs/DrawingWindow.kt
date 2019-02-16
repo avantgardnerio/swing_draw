@@ -5,6 +5,9 @@ import net.squarelabs.widgets.Widget
 import java.awt.*
 import java.awt.event.*
 import javax.swing.JFrame
+import java.awt.image.BufferStrategy
+
+
 
 class DrawingWindow(var root: Widget) : JFrame(), MouseListener, MouseMotionListener, KeyListener, ComponentListener {
 
@@ -16,6 +19,7 @@ class DrawingWindow(var root: Widget) : JFrame(), MouseListener, MouseMotionList
         defaultCloseOperation = EXIT_ON_CLOSE
         size = Dimension(400, 400)
         isVisible = true
+        createBufferStrategy(2)
         root.addListener(object : WidgetListener {
             override fun invalidated(region: Rect) {
                 // TODO: invalidation rectangle logic
@@ -29,11 +33,20 @@ class DrawingWindow(var root: Widget) : JFrame(), MouseListener, MouseMotionList
     }
 
     override fun paint(graphics: Graphics?) {
-        val g = graphics as Graphics2D
-        g.translate(0, getTop()) // don't draw behind OS title bar
-        g.translate(root.bounds.origin.x, root.bounds.origin.y)
-        g.clipRect(0, 0, root.bounds.size.x, root.bounds.size.y)
-        root.paint(g, width, height)
+        if(bufferStrategy == null) {
+            repaint()
+            return
+        }
+        val g = bufferStrategy!!.drawGraphics as Graphics2D
+        try {
+            g.translate(0, getTop()) // don't draw behind OS title bar
+            g.translate(root.bounds.origin.x, root.bounds.origin.y)
+            g.clipRect(0, 0, root.bounds.size.x, root.bounds.size.y)
+            root.paint(g, width, height)
+            bufferStrategy.show()
+        } finally {
+            g.dispose()
+        }
     }
 
     override fun componentResized(me: ComponentEvent?) {

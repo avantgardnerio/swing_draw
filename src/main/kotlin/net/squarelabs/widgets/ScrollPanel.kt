@@ -62,6 +62,15 @@ class ScrollPanel : Widget {
         })
     }
 
+    fun getChildrenBounds(): Rect {
+        val res = children.fold(Rect.MIN) { acc, cur ->
+            if(cur == hScroll || cur == vScroll) return acc
+            return Rect.union(acc, cur.bounds)
+        }
+        println("-------res=$res")
+        return res
+    }
+
     override fun layout(rect: Rect) {
         super.layout(rect)
         hScroll.layout(rect)
