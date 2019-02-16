@@ -22,7 +22,7 @@ class HScroll(val dataSource: ScalarSource) : Widget {
     private val scrollBarWidth = 15
     private val widget = WidgetImpl()
     private val listeners = mutableListOf<ScalarListener>()
-    private var downPos: Int? = null
+    private var downPos: Double? = null
     private var downValue: Double? = null
 
     override fun layout(rect: Rect) {
@@ -36,8 +36,8 @@ class HScroll(val dataSource: ScalarSource) : Widget {
 
         val barOrigin = Point(0, 0)
         val barSize = Point(bounds.size.x, scrollBarWidth)
+        val sliderOrigin = Point(sliderLeft, barOrigin.y + 1)
         val sliderSize = Point(sliderWidth, scrollBarWidth - 2)
-        val sliderOrigin = Point(1, barOrigin.y + 1)
         GraphUtils.drawEmbossedRect(graphics, Rect(barOrigin, barSize), true, Color.DARK_GRAY)
         GraphUtils.drawEmbossedRect(graphics, Rect(sliderOrigin, sliderSize), false, Color.GRAY)
     }
@@ -48,6 +48,12 @@ class HScroll(val dataSource: ScalarSource) : Widget {
     val sliderWidth: Int
         get() = ((bounds.size.x - 2) * (bounds.size.x / dataRange)).toInt()
 
+    val sliderRange: Int
+        get() = bounds.size.x - sliderWidth
+
+    val sliderLeft: Int
+        get() = (dataSource.getValue() / dataRange * sliderRange).toInt()
+
     // events
     fun addListener(listener: ScalarListener) {
         listeners.add(listener)
@@ -55,7 +61,7 @@ class HScroll(val dataSource: ScalarSource) : Widget {
 
     override fun mousePressed(position: Point) {
         println("down")
-        downPos = position.x
+        downPos = (position.x - sliderLeft).toDouble() / sliderWidth
         downValue = dataSource.getValue()
     }
 
