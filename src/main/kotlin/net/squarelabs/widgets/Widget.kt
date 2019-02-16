@@ -1,6 +1,7 @@
 package net.squarelabs.widgets
 
 import net.squarelabs.Rect
+import net.squarelabs.listeners.WidgetListener
 import java.awt.Graphics2D
 import java.awt.Point
 import java.awt.event.MouseEvent
@@ -17,13 +18,24 @@ interface Widget {
         bounds = rect
     }
 
+    var listeners: MutableList<WidgetListener>
+
+    fun addListener(listener: WidgetListener) {
+        listeners.add(listener)
+    }
+
+    fun addChild(child: Widget) {
+        children.add(child)
+        child.addListener(object : WidgetListener {
+            override fun invalidated(region: Rect) {
+                // TODO: translate rect
+                listeners.forEach { it.invalidated(region) }
+            }
+        })
+    }
+
     fun getChildBounds(): Rect {
-        return children.fold(Rect.MIN) { acc, cur ->
-            Rect.union(
-                acc,
-                cur.bounds
-            )             
-        }
+        return children.fold(Rect.MIN) { acc, cur -> Rect.union(acc, cur.bounds) }
     }
 
     fun paintChild(graphics: Graphics2D, width: Int, height: Int, child: Widget) {

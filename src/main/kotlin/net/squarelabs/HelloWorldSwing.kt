@@ -12,22 +12,22 @@ fun main() {
     }
 
     val redScroll = ScrollPanel()
-    red.children.add(redScroll)
+    red.addChild(redScroll)
 
     val green = GridPanel {
         it.backgroundColor = Color.GREEN
     }
-    redScroll.children.add(green)
+    redScroll.addChild(green)
 
     val greenScroll = ScrollPanel()
-    green.children.add(greenScroll)
+    green.addChild(greenScroll)
     green.layout(Rect(Point(0,0), Point(1000, 1000)))
 
     val blue = GridPanel {
         it.bounds = Rect(Point(0,0), Point(1000, 1000))
         it.backgroundColor = Color.BLUE
     }
-    greenScroll.children.add(blue)
+    greenScroll.addChild(blue)
 
     DrawingWindow(red)
 }

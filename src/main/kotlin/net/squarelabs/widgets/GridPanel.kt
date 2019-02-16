@@ -1,6 +1,7 @@
 package net.squarelabs.widgets
 
 import net.squarelabs.Rect
+import net.squarelabs.listeners.WidgetListener
 import java.awt.Color
 import java.awt.Font
 import java.awt.Graphics2D
@@ -9,16 +10,19 @@ import java.awt.Point
 class GridPanel(
         cb: (it: GridPanel) -> Unit
 ) : Widget {
+    
+    override var listeners: MutableList<WidgetListener>
+        get() = widget.listeners
+        set(value) { widget.listeners = value }
+
     override var children: MutableList<Widget>
         get() = widget.children
-        set(value) {
-            widget.children = value
-        }
+        set(value) { widget.children = value }
+
     override var bounds: Rect
         get() = widget.bounds
-        set(value) {
-            widget.bounds = value
-        }
+        set(value) { widget.bounds = value }
+    
     var backgroundColor = Color.GRAY
     private val widget = WidgetImpl()
     private val gridSize = 25

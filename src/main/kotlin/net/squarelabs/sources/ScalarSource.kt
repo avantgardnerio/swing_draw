@@ -1,4 +1,4 @@
-package net.squarelabs
+package net.squarelabs.sources
 
 interface ScalarSource {
     fun getMin(): Double
@@ -6,8 +6,4 @@ interface ScalarSource {
     fun getMax(): Double
 
     fun getValue(): Double
-}
-
-interface ScalarListener {
-    fun onChange(value: Double)
 }

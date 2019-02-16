@@ -2,26 +2,29 @@ package net.squarelabs.widgets
 
 import net.squarelabs.GraphUtils
 import net.squarelabs.Rect
-import net.squarelabs.ScalarListener
-import net.squarelabs.ScalarSource
+import net.squarelabs.listeners.ScalarListener
+import net.squarelabs.listeners.WidgetListener
+import net.squarelabs.sources.ScalarSource
 import java.awt.Color
 import java.awt.Graphics2D
 import java.awt.Point
 
 class HScroll(val dataSource: ScalarSource) : Widget {
+    override var listeners: MutableList<WidgetListener>
+        get() = widget.listeners
+        set(value) { widget.listeners = value }
+
     override var children: MutableList<Widget>
         get() = widget.children
-        set(value) {
-            widget.children = value
-        }
+        set(value) { widget.children = value }
+
     override var bounds: Rect
         get() = widget.bounds
-        set(value) {
-            widget.bounds = value
-        }
+        set(value) { widget.bounds = value }
+
     private val scrollBarWidth = 15
     private val widget = WidgetImpl()
-    private val listeners = mutableListOf<ScalarListener>()
+    private val scrollListeners = mutableListOf<ScalarListener>()
     private var downPos: Double? = null
 
     override fun layout(rect: Rect) {
@@ -54,8 +57,8 @@ class HScroll(val dataSource: ScalarSource) : Widget {
         get() = (dataSource.getValue() / dataRange * sliderRange).toInt()
 
     // events
-    fun addListener(listener: ScalarListener) {
-        listeners.add(listener)
+    fun addScrollListener(listener: ScalarListener) {
+        scrollListeners.add(listener)
     }
 
     override fun mousePressed(position: Point) {
@@ -65,8 +68,8 @@ class HScroll(val dataSource: ScalarSource) : Widget {
     override fun mouseMoved(position: Point) {
         if (downPos == null) return
         val newLeft = position.x - sliderWidth * downPos!!
-        val newVal = newLeft / sliderRange
-        listeners.forEach { it.onChange(newVal) }
+        val newVal = (newLeft / sliderRange) * dataRange + dataSource.getMin()
+        scrollListeners.forEach { it.onChange(newVal) }
     }
 
     override fun mouseReleased(position: Point) {

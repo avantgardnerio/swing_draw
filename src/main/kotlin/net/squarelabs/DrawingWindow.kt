@@ -1,5 +1,6 @@
 package net.squarelabs
 
+import net.squarelabs.listeners.WidgetListener
 import net.squarelabs.widgets.Widget
 import java.awt.*
 import java.awt.event.*
@@ -15,6 +16,12 @@ class DrawingWindow(var root: Widget) : JFrame(), MouseListener, MouseMotionList
         defaultCloseOperation = EXIT_ON_CLOSE
         size = Dimension(400, 400)
         isVisible = true
+        root.addListener(object : WidgetListener {
+            override fun invalidated(region: Rect) {
+                // TODO: invalidation rectangle logic
+                repaint()
+            }
+        })
     }
 
     fun getTop(): Int {
