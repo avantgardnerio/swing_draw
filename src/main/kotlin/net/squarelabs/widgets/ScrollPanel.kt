@@ -29,7 +29,13 @@ class ScrollPanel : Widget {
         }
 
         override fun getMax(): Double {
-            return (getChildBounds().size.x - bounds.size.x).toDouble()
+            val left = getChildBounds().origin.x
+            val childSize = getChildBounds().size.x
+            val right = left + childSize
+            val mySize = bounds.size.x
+            val value = (childSize - mySize).toDouble()
+            println("---------childSize=$childSize mySize=$mySize left=$left right=$right")
+            return value
         }
 
         override fun getValue(): Double {
