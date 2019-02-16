@@ -34,10 +34,9 @@ class HScroll(val dataSource: ScalarSource) : Widget {
     override fun paint(graphics: Graphics2D, width: Int, height: Int) {
         super.paint(graphics, width, height)
 
-        val ratio = bounds.size.x / dataRange
         val barOrigin = Point(0, 0)
         val barSize = Point(bounds.size.x, scrollBarWidth)
-        val sliderSize = Point(((barSize.x - 2) * ratio).toInt(), scrollBarWidth - 2)
+        val sliderSize = Point(sliderWidth, scrollBarWidth - 2)
         val sliderOrigin = Point(1, barOrigin.y + 1)
         GraphUtils.drawEmbossedRect(graphics, Rect(barOrigin, barSize), true, Color.DARK_GRAY)
         GraphUtils.drawEmbossedRect(graphics, Rect(sliderOrigin, sliderSize), false, Color.GRAY)
@@ -46,7 +45,8 @@ class HScroll(val dataSource: ScalarSource) : Widget {
     val dataRange: Double
         get() = dataSource.getMax() - dataSource.getMin()
 
-    var sliderWidth: Int = ((bounds.size.x - 2) * bounds.size.x / dataRange).toInt()
+    val sliderWidth: Int
+        get() = ((bounds.size.x - 2) * (bounds.size.x / dataRange)).toInt()
 
     // events
     fun addListener(listener: ScalarListener) {
