@@ -24,11 +24,17 @@ class ScrollPanel : Widget {
     private val widget = WidgetImpl()
 
     private val hScroll = HScroll(object : ScalarSource {
-        override fun getMin(): Double { return 0.0 }
+        override fun getMin(): Double {
+            return 0.0
+        }
 
-        override fun getMax(): Double { return getChildBounds().size.x.toDouble() }
+        override fun getMax(): Double {
+            return (getChildBounds().size.x - bounds.size.x).toDouble()
+        }
 
-        override fun getValue(): Double { return getChildBounds().origin.getX() }
+        override fun getValue(): Double {
+            return -getChildBounds().origin.getX()
+        }
     })
 
     private val vScroll = VScroll(object : ScalarSource {
@@ -47,7 +53,7 @@ class ScrollPanel : Widget {
                 children.forEach {
                     if(it != hScroll && it != vScroll) {
                         println("set x=$value")
-                        val rect = Rect(Point(value.toInt(), it.bounds.origin.y), it.bounds.size)
+                        val rect = Rect(Point(-value.toInt(), it.bounds.origin.y), it.bounds.size)
                         it.layout(rect)
                         listeners.forEach { it.invalidated(bounds) }
                     }

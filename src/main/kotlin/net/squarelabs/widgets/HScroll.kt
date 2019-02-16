@@ -69,7 +69,8 @@ class HScroll(val dataSource: ScalarSource) : Widget {
         if (downPos == null) return
         val newLeft = position.x - sliderWidth * downPos!!
         val newVal = (newLeft / sliderRange) * dataRange + dataSource.getMin()
-        scrollListeners.forEach { it.onChange(newVal) }
+        val clamped = Math.min(Math.max(newVal, dataSource.getMin()), dataSource.getMax())
+        scrollListeners.forEach { it.onChange(clamped) }
     }
 
     override fun mouseReleased(position: Point) {
